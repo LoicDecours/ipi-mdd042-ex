@@ -1,12 +1,15 @@
 package com.ipiecoles.java.java230;
 
 import com.ipiecoles.java.java230.exceptions.BatchException;
+import com.ipiecoles.java.java230.exceptions.TechnicienException;
 import com.ipiecoles.java.java230.model.Commercial;
 import com.ipiecoles.java.java230.model.Employe;
 import com.ipiecoles.java.java230.model.Manager;
 import com.ipiecoles.java.java230.model.Technicien;
 import com.ipiecoles.java.java230.repository.EmployeRepository;
 import com.ipiecoles.java.java230.repository.ManagerRepository;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,12 @@ public class MyRunner implements CommandLineRunner {
     private static final int NB_CHAMPS_TECHNICIEN = 7;
     private static final String REGEX_MATRICULE_MANAGER = "^M[0-9]{5}$";
     private static final int NB_CHAMPS_COMMERCIAL = 7;
+    //regex du salaire (nombre.nombre)
+    private static final String REGEX_SALAIRE = "^[0-9]*.[0-9]$";
+    //regex du chiffre d'affaire (nombre.nombre)
+    private static final String REGEX_CA = "^[0-9]*.[0-9]$";
+    //regex de la performance (0-100)
+    private static final String REGEX_PERF = "^[0-9]$|^[1-9][0-9]$|^(100)$";
 
     @Autowired
     private EmployeRepository employeRepository;
@@ -111,17 +120,62 @@ public class MyRunner implements CommandLineRunner {
     private void processCommercial(String ligneCommercial) throws BatchException {
         String[] commercialFields = ligneCommercial.split(",");
 
+        //Contrôle la longueur de la ligne
+        if (commercialFields.length != NB_CHAMPS_COMMERCIAL){
+            throw new BatchException("La ligne commercial ne contient pas " + NB_CHAMPS_COMMERCIAL + " éléments mais " + commercialFields.length);
+        }
+
         //Contrôle le matricule
         if (!commercialFields[0].matches(REGEX_MATRICULE)){
             throw new BatchException("la chaîne " + commercialFields[0] + " ne respecte pas l'expression régulière " + REGEX_MATRICULE);
-        } else{
-            Commercial c = new Commercial();
-            employes.add(c);
         }
-        if(!commercialFields[1].matches(REGEX_NOM))
 
-        //LocalDate d = DateTimeFormat.forPattern("dd/MM/yyyy").parseLocalDate(chaineDate);
+        //Contrôle le nom
+        if(!commercialFields[1].matches(REGEX_NOM)){
+            throw new BatchException("la chaîne " + commercialFields[1] + " ne respecte pas l'expression régulière " + REGEX_NOM);
+        }
 
+        //Contrôle le prénom
+        if (!commercialFields[2].matches(REGEX_PRENOM)){
+            throw new BatchException("la chaîne " + commercialFields[2] + " ne respecte pas l'expression régulière " + REGEX_PRENOM);
+        }
+
+        //Contrôle la date
+        LocalDate date;
+        try {
+            date = DateTimeFormat.forPattern("dd/MM/yyyy").parseLocalDate(commercialFields[3]);
+        } catch (Exception e){
+            throw new BatchException(commercialFields[3] + " ne respecte pas le format de date dd/MM/yyyy");
+        }
+
+        //Contrôle le salaire
+        if (!commercialFields[4].matches(REGEX_SALAIRE)){
+            throw new BatchException(commercialFields[4] + " n'est pas un nombre valide pour le salaire");
+        }
+        Double salaire = Double.parseDouble(commercialFields[4]);
+
+        //Contrôle le Chiffre d'affaire
+        if (!commercialFields[5].matches(REGEX_CA)){
+            throw new BatchException("Le chiffre d'affaire du commercial est incorrect : " + commercialFields[5]);
+        }
+        Double CA = Double.parseDouble(commercialFields[5]);
+
+        //Contrôle la performance
+        if (!commercialFields[6].matches(REGEX_PERF)){
+            throw new BatchException("La performance du commercial est incorrecte : " + commercialFields[6]);
+        }
+        Integer perf = Integer.parseInt(commercialFields[6]);
+
+
+        Commercial c = new Commercial();
+        c.setMatricule(commercialFields[0]);
+        c.setNom(commercialFields[1]);
+        c.setPrenom(commercialFields[2]);
+        c.setDateEmbauche(date);
+        c.setSalaire(salaire);
+        c.setCaAnnuel(CA);
+        c.setPerformance(perf);
+        employes.add(c);
     }
 
     /**
@@ -132,13 +186,46 @@ public class MyRunner implements CommandLineRunner {
     private void processManager(String ligneManager) throws BatchException {
         String[] managerFields = ligneManager.split(",");
 
+        //Contrôle la longueur de la ligne
+        if (managerFields.length != NB_CHAMPS_MANAGER){
+            throw new BatchException("La ligne commercial ne contient pas " + NB_CHAMPS_MANAGER + " éléments mais " + managerFields.length);
+        }
         //Contrôle le matricule
         if (!managerFields[0].matches(REGEX_MATRICULE)){
             throw new BatchException("la chaîne " + managerFields[0] + " ne respecte pas l'expression régulière " + REGEX_MATRICULE);
-        }else{
-            Manager m = new Manager();
-            employes.add(m);
         }
+        //Contrôle le nom
+        if(!managerFields[1].matches(REGEX_NOM)){
+            throw new BatchException("la chaîne " + managerFields[1] + " ne respecte pas l'expression régulière " + REGEX_NOM);
+        }
+
+        //Contrôle le prénom
+        if (!managerFields[2].matches(REGEX_PRENOM)){
+            throw new BatchException("la chaîne " + managerFields[2] + " ne respecte pas l'expression régulière " + REGEX_PRENOM);
+        }
+
+        //Contrôle la date
+        LocalDate date;
+        try {
+            date = DateTimeFormat.forPattern("dd/MM/yyyy").parseLocalDate(managerFields[3]);
+        } catch (Exception e){
+            throw new BatchException(managerFields[3] + " ne respecte pas le format de date dd/MM/yyyy");
+        }
+
+        //Contrôle le salaire
+        if (!managerFields[4].matches(REGEX_SALAIRE)){
+            throw new BatchException(managerFields[4] + " n'est pas un nombre valide pour le salaire");
+        }
+        Double salaire = Double.parseDouble(managerFields[4]);
+
+        Manager m = new Manager();
+        m.setMatricule(managerFields[0]);
+        m.setNom(managerFields[1]);
+        m.setPrenom(managerFields[2]);
+        m.setDateEmbauche(date);
+        m.setSalaire(salaire);
+        employes.add(m);
+
     }
 
     /**
@@ -149,12 +236,81 @@ public class MyRunner implements CommandLineRunner {
     private void processTechnicien(String ligneTechnicien) throws BatchException {
         String[] technicienFields = ligneTechnicien.split(",");
 
+        //Contrôle la longueur de la ligne
+        if (technicienFields.length != NB_CHAMPS_TECHNICIEN){
+            throw new BatchException("La ligne commercial ne contient pas " + NB_CHAMPS_TECHNICIEN + " éléments mais " + technicienFields.length);
+        }
+
         //Contrôle le matricule
         if (!technicienFields[0].matches(REGEX_MATRICULE)){
             throw new BatchException("la chaîne " + technicienFields[0] + " ne respecte pas l'expression régulière " + REGEX_MATRICULE);
-        } else{
-            Technicien t = new Technicien();
-            employes.add(t);
         }
+
+        //Contrôle le nom
+        if(!technicienFields[1].matches(REGEX_NOM)){
+            throw new BatchException("la chaîne " + technicienFields[1] + " ne respecte pas l'expression régulière " + REGEX_NOM);
+        }
+
+        //Contrôle le prénom
+        if (!technicienFields[2].matches(REGEX_PRENOM)){
+            throw new BatchException("la chaîne " + technicienFields[2] + " ne respecte pas l'expression régulière " + REGEX_PRENOM);
+        }
+
+        //Contrôle la date
+        LocalDate date;
+        try {
+            date = DateTimeFormat.forPattern("dd/MM/yyyy").parseLocalDate(technicienFields[3]);
+        } catch (Exception e){
+            throw new BatchException(technicienFields[3] + " ne respecte pas le format de date dd/MM/yyyy");
+        }
+
+        //Contrôle le salaire
+        if (!technicienFields[4].matches(REGEX_SALAIRE)){
+            throw new BatchException(technicienFields[4] + " n'est pas un nombre valide pour le salaire");
+        }
+        Double salaire = Double.parseDouble(technicienFields[4]);
+
+        //Contrôle si le grade est un chiffre
+        Integer grade;
+        try{
+            grade = Integer.parseInt(technicienFields[5]);
+        } catch (Exception e){
+            throw new BatchException("Le grade du technicien est incorrect : " + technicienFields[5]);
+        }
+
+        //Contrôle la validité du matricule manager
+        if (!technicienFields[6].matches(REGEX_MATRICULE_MANAGER)){
+            throw new BatchException("la chaîne " + technicienFields[6] + " ne respecte pas l'expression régulière " + REGEX_MATRICULE_MANAGER);
+        }
+        //Contrôle si le manager existe dans la BDD puis dans le fichier
+        Manager manager = managerRepository.findByMatricule(technicienFields[6]);
+        if (manager == null){
+            for (int i = 0; i < employes.size(); i++){
+                if(!(employes.get(i) instanceof Manager) || !employes.get(i).getMatricule().equals(technicienFields[6])){
+                    throw new BatchException("Le manager de matricule " + technicienFields[6] + " n'a pas été trouvé dans le fichier ou en BDD");
+                }else {
+                    manager = (Manager) employes.get(i);
+                    break;
+                }
+            }
+        }
+
+        Technicien t = new Technicien();
+        t.setMatricule(technicienFields[0]);
+        t.setNom(technicienFields[1]);
+        t.setPrenom(technicienFields[2]);
+        t.setDateEmbauche(date);
+
+        //Contrôle si le grade est compris entre 1 et 5 et le set si valide
+        try{
+            t.setGrade(grade);
+        }catch (Exception e){
+            throw new BatchException("Le grade doit être compris entre 1 et 5");
+        }
+
+        t.setSalaire(salaire);
+        t.setManager(manager);
+        employes.add(t);
+
     }
 }

@@ -1,0 +1,20 @@
+
+dsquid:S3457K"AFormat specifiers should be used instead of string concatenation.(™¤ƒûÿÿÿÿ8ÚÖ¡®-
+_squid:S3457U"AFormat specifiers should be used instead of string concatenation.(Ä¨¹¬8İ›í ®-
+’squid:S1192–"nDefine a constant instead of duplicating this literal " ne respecte pas le format de date dd/MM/yyyy" 3 times.(íØèåùÿÿÿÿ8íÇ£¦®-
+Isquid:S1481"*Remove this unused "grade" local variable.(ËÍŠ¨8„î®©®-
+jsquid:S1192”"KDefine a constant instead of duplicating this literal "dd/MM/yyyy" 3 times.(´Ê”Ö8íÇ£¦®-
+qsquid:S00117£"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Âı·ë8£æç¨®-
+dsquid:S3457F"AFormat specifiers should be used instead of string concatenation.(Š©ºĞÿÿÿÿÿ8¿ï®-
+Zsquid:S2629F"7Use the built-in formatting to construct this argument.(Š©ºĞÿÿÿÿÿ8¿ï®-
+gsquid:CommentedOutCodeLine<"<This block of commented-out lines of code should be removed.(…÷âñúÿÿÿÿ
+ƒsquid:S1192"eDefine a constant instead of duplicating this literal "La ligne commercial ne contient pas " 3 times.(ÓÍØò8›¥¦®-
+gsquid:S2095I"DUse try-with-resources or close this "Stream" in a "finally" clause.(éä÷üÿÿÿÿ8¶Îı ®-
+_squid:S3457O"AFormat specifiers should be used instead of string concatenation.(‡¦š8ËÕÌ ®-
+zsquid:S2629O"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(‡¦š8ËÕÌ ®-
+squid:S1192›"lDefine a constant instead of duplicating this literal " n'est pas un nombre valide pour le salaire" 3 times.(¼Üå®şÿÿÿÿ8ÿ²ã¦®-
+psquid:S1192"RDefine a constant instead of duplicating this literal " Ã©lÃ©ments mais " 3 times.(ÓÍØò8›¥¦®-
+qsquid:S1192„"MDefine a constant instead of duplicating this literal "la chaÃ®ne " 10 times.(¢˜Šøÿÿÿÿ8À—¢®-
+squid:S1192„"lDefine a constant instead of duplicating this literal " ne respecte pas l'expression rÃ©guliÃ¨re " 10 times.(¢˜Šøÿÿÿÿ8À—¢®-
+Isquid:S1135X"2Complete the task associated to this TODO comment.(…ïœ†
+Xsquid:S1854"9Remove this useless assignment to local variable "grade".(ËÍŠ¨8„î®©®-
